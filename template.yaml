@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Amazon Pinpoint Whatsapp Channel.  This application will deliver Amazon Pinpoint triggered messages to Whatsapp using Twilio API.  Written in Python3.
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  ACCOUNTSID:
+    Type: String
+    Description: ACCOUNT_SID for Twilio account
+  AUTHTOKEN:
+    Type: String
+    Description: AUTH_TOKEN for Twilio account
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 180
+
+Resources:
+  AmazonPinpointWhatsappChannelFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: AmazonPinpointWhatsappChannel
+      Description: A function invoked by an Amazon Pinpoint Campaign or Journey that sends a message to a user through Whatsapp
+      CodeUri: pinpoint_whatsapp_channel/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          ACCOUNT_SID:
+            Ref: ACCOUNTSID
+          AUTH_TOKEN:
+            Ref: AUTHTOKEN
+  PinpointInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref AmazonPinpointWhatsappChannelFunction
+      Principal: !Sub pinpoint.${AWS::Region}.amazonaws.com
+      SourceArn: !Sub arn:${AWS::Partition}:mobiletargeting:${AWS::Region}:${AWS::AccountId}:apps/*
+  
+
+Outputs:
+  AmazonPinpointWhatsappChannelFunction:
+    Description: "Amazon Pinpoint Whatsapp Channel Lambda Function ARN"
+    Value: !GetAtt AmazonPinpointWhatsappChannelFunction.Arn
