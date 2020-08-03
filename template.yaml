@@ -15,6 +15,19 @@ Globals:
   Function:
     Timeout: 180
 
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: amazon-pinpoint-whatsapp-channel
+    Description: Amazon Pinpoint WhatsApp Channel.  This application will deliver Amazon Pinpoint triggered messages to WhatsApp.
+    Author: Amazon Pinpoint
+    SpdxLicenseId: MIT-0
+    LicenseUrl: LICENSE
+    ReadmeUrl: README.md
+    Labels: ['amazon-pinpoint', 'pinpoint', 'custom-channel', 'whatsapp', 'python']
+    HomePageUrl: https://aws.amazon.com/pinpoint
+    SemanticVersion: 1.0.0
+    SourceCodeUrl: https://github.com/aws-samples/amazon-pinpoint-whatsapp-channel
+
 Resources:
   AmazonPinpointWhatsappChannelFunction:
     Type: AWS::Serverless::Function
